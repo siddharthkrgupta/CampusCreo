@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 64 64"
+     width="64" height="64">
+
+  <!-- Dark Blue "C" -->
+  <path d="M48 12
+           A20 20 0 1 0 48 52
+           L42 46
+           A12 12 0 1 1 42 18
+           Z"
+        fill="#0B3B57"/>
+
+  <!-- Graduation cap (orange) -->
+  <polygon points="32,18 18,24 32,30 46,24"
+           fill="#F27A2E"/>
+  <rect x="27" y="29" width="10" height="6" rx="1" ry="1" fill="#F27A2E"/>
+  <path d="M40 23 L43 27 L42 29"
+        fill="none"
+        stroke="#F27A2E"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+  <circle cx="43" cy="27" r="1.2" fill="#F27A2E"/>
+
+  <!-- Open book (orange) -->
+  <path d="M24 38
+           C27 36, 29 35, 32 37
+           C29 38, 26 39, 24 38 Z"
+        fill="#F27A2E"/>
+  <path d="M40 38
+           C37 36, 35 35, 32 37
+           C35 38, 38 39, 40 38 Z"
+        fill="#F27A2E"/>
+</svg>

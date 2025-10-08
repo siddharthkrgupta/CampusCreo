@@ -1,0 +1,891 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+  --background: #ffffff;
+  --foreground: #475569;
+  --card: #f8fafc;
+  --card-foreground: #334155;
+  --popover: #ffffff;
+  --popover-foreground: #475569;
+  --primary: #0f766e;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #334155;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #059669;
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --input: #f8fafc;
+  --ring: rgba(5, 150, 105, 0.3);
+  --chart-1: #0f766e;
+  --chart-2: #059669;
+  --chart-3: #0891b2;
+  --chart-4: #475569;
+  --chart-5: #e2e8f0;
+  --radius: 0.75rem;
+  --sidebar: #f8fafc;
+  --sidebar-foreground: #475569;
+  --sidebar-primary: #0f766e;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #059669;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: rgba(5, 150, 105, 0.3);
+}
+
+/* Dark mode tokens */
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
+  --primary: #14b8a6;
+  --primary-foreground: #0f172a;
+  --secondary: #334155;
+  --secondary-foreground: #f1f5f9;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #10b981;
+  --accent-foreground: #0f172a;
+  --destructive: #ef4444;
+  --destructive-foreground: #f1f5f9;
+  --border: #334155;
+  --input: #1e293b;
+  --ring: rgba(16, 185, 129, 0.3);
+  --chart-1: #14b8a6;
+  --chart-2: #10b981;
+  --chart-3: #0891b2;
+  --chart-4: #94a3b8;
+  --chart-5: #334155;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #f1f5f9;
+  --sidebar-primary: #14b8a6;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #10b981;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #334155;
+  --sidebar-ring: rgba(16, 185, 129, 0.3);
+}
+
+/* Token mapping to Tailwind is implicit via utility classes; explicit @theme removed to avoid tooling errors. */
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+    color-scheme: light dark;
+  }
+}
+
+/* Animations (merged CivicSetu + existing) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+
+    /* Sidebar border fade animation */
+    .sidebar-border-fade {
+      transition: border-color 320ms ease;
+    }
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Interactive utility classes */
+.hover-lift {
+  transition: transform 0.3s var(--ease-out, cubic-bezier(.25, .8, .25, 1)), box-shadow 0.3s;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px -8px rgba(0, 0, 0, 0.12);
+}
+
+.focus-ring-animated:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  animation: focusPulse 1.2s ease-out;
+}
+
+@keyframes focusPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 0 4px var(--ring);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+
+  .animate-fade-in-up,
+  .animate-float,
+  .shimmer,
+  .hover-lift,
+  .focus-ring-animated,
+  [data-recharts-wrapper] * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Scrollbar utilities */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  background-clip: content-box;
+}
+
+/* --------------------------------------------------------- */
+/* Extended Design Tokens (derived; safe fallbacks)           */
+/* --------------------------------------------------------- */
+:root {
+  --surface: var(--card);
+  --surface-alt: var(--muted);
+  --surface-hover: color-mix(in srgb, var(--card) 80%, var(--foreground) 10%);
+  --surface-active: color-mix(in srgb, var(--card) 70%, var(--foreground) 15%);
+  --border-muted: color-mix(in srgb, var(--border) 85%, transparent);
+  --border-strong: color-mix(in srgb, var(--border) 60%, var(--foreground) 25%);
+  --shadow-color: 210 40% 2%;
+  --shadow-xs: 0 1px 2px -1px hsl(var(--shadow-color)/0.15), 0 0 0 1px hsl(var(--shadow-color)/0.04);
+  --shadow-sm: 0 2px 4px -2px hsl(var(--shadow-color)/0.18), 0 1px 3px -1px hsl(var(--shadow-color)/0.10);
+  --shadow-md: 0 4px 8px -2px hsl(var(--shadow-color)/0.20), 0 2px 4px -2px hsl(var(--shadow-color)/0.12);
+  --shadow-lg: 0 12px 32px -8px hsl(var(--shadow-color)/0.28), 0 4px 12px -2px hsl(var(--shadow-color)/0.14);
+  --transition-base: 160ms cubic-bezier(.4, 0, .2, 1);
+  --ring-focus: var(--ring);
+  --focus-visible-outline: 2px solid var(--ring-focus);
+}
+
+/* --------------------------------------------------------- */
+/* Role-Based Theming Tokens (scoped via [data-role])        */
+/* --------------------------------------------------------- */
+[data-role] {
+  /* fallback defaults (student-like) */
+  --role-primary: #0f766e;
+  --role-primary-hover: #0d5f59;
+  --role-primary-soft: rgba(15, 118, 110, 0.08);
+  --role-on-primary: #ffffff;
+  --role-surface-alt: var(--surface-alt);
+  --role-surface-alt-hover: color-mix(in srgb, var(--surface-alt) 92%, var(--foreground) 5%);
+  --role-text-strong: var(--foreground);
+  --role-border: var(--border);
+  --role-border-strong: color-mix(in srgb, var(--border) 60%, var(--foreground) 25%);
+  --role-focus: var(--ring);
+}
+
+/* Student (teal) */
+[data-role="student"] {
+  --role-primary: #0f766e;
+  --role-primary-hover: #0d5f59;
+  --role-primary-soft: rgba(15, 118, 110, 0.08);
+  --role-focus: rgba(5, 150, 105, 0.45);
+}
+
+/* Placement Cell (amber themed) */
+[data-role="placement-cell"] {
+  --role-primary: #d97706;
+  /* amber-600 */
+  --role-primary-hover: #b45309;
+  /* amber-700 */
+  --role-primary-soft: rgba(217, 119, 6, 0.10);
+  --role-focus: rgba(245, 158, 11, 0.55);
+}
+
+/* Faculty (purple / indigo) */
+[data-role="faculty"] {
+  --role-primary: #6d28d9;
+  /* violet-700 */
+  --role-primary-hover: #5b21b6;
+  /* violet-800 */
+  --role-primary-soft: rgba(109, 40, 217, 0.10);
+  --role-focus: rgba(139, 92, 246, 0.55);
+}
+
+/* Employer (blue / cyan) */
+[data-role="employer"] {
+  --role-primary: #2563eb;
+  /* blue-600 */
+  --role-primary-hover: #1d4ed8;
+  /* blue-700 */
+  --role-primary-soft: rgba(37, 99, 235, 0.10);
+  --role-focus: rgba(37, 99, 235, 0.50);
+}
+
+.dark [data-role] {
+  --role-surface-alt: #1e293b;
+  --role-surface-alt-hover: color-mix(in srgb, #1e293b 85%, #334155 15%);
+  --role-text-strong: var(--foreground);
+  --role-border: #334155;
+  --role-border-strong: #475569;
+}
+
+.dark {
+  --surface: var(--card);
+  --surface-alt: #152033;
+  --surface-hover: color-mix(in srgb, var(--card) 70%, var(--foreground) 10%);
+  --surface-active: color-mix(in srgb, var(--card) 60%, var(--foreground) 20%);
+  --shadow-color: 210 40% 2%;
+}
+
+/* --------------------------------------------------------- */
+/* Elevation Utilities                                        */
+/* --------------------------------------------------------- */
+.elevation-xs {
+  box-shadow: var(--shadow-xs);
+}
+
+.elevation-sm {
+  box-shadow: var(--shadow-sm);
+}
+
+.elevation-md {
+  box-shadow: var(--shadow-md);
+}
+
+.elevation-lg {
+  box-shadow: var(--shadow-lg);
+}
+
+/* --------------------------------------------------------- */
+/* Glass / Frosted Surfaces                                   */
+/* --------------------------------------------------------- */
+.glass {
+  background: linear-gradient(135deg,
+      color-mix(in srgb, var(--surface) 92%, transparent),
+      color-mix(in srgb, var(--surface-alt) 88%, transparent));
+  backdrop-filter: blur(14px) saturate(1.25);
+  -webkit-backdrop-filter: blur(14px) saturate(1.25);
+  border: 1px solid var(--border-muted);
+}
+
+.glass-dark {
+  background: linear-gradient(135deg,
+      color-mix(in srgb, var(--surface) 75%, transparent),
+      color-mix(in srgb, var(--surface-alt) 65%, transparent));
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  border: 1px solid var(--border-muted);
+}
+
+/* --------------------------------------------------------- */
+/* Interactive & Hover Patterns                               */
+/* --------------------------------------------------------- */
+.interactive-base {
+  transition: background-color var(--transition-base),
+    color var(--transition-base),
+    border-color var(--transition-base),
+    box-shadow var(--transition-base),
+    transform 220ms cubic-bezier(.25, .8, .25, 1);
+  will-change: transform, box-shadow;
+}
+
+.interactive-base:where(button, [role="button"], a, div) {
+  outline: none;
+}
+
+.interactive-base:hover {
+  background: var(--surface-hover);
+}
+
+.interactive-base:active {
+  background: var(--surface-active);
+  transform: translateY(1px);
+}
+
+.interactive-base:focus-visible {
+  outline: var(--focus-visible-outline);
+  outline-offset: 2px;
+}
+
+/* Subtle scale variant */
+.hover-scale-sm {
+  transition: transform var(--transition-base);
+}
+
+.hover-scale-sm:hover {
+  transform: translateY(-2px) scale(1.015);
+}
+
+.hover-scale-sm:active {
+  transform: translateY(0) scale(.99);
+}
+
+/* Card Hover (applies only if element already has a border) */
+.card-hover {
+  transition: border-color var(--transition-base), box-shadow var(--transition-base), background-color var(--transition-base);
+}
+
+.card-hover:hover {
+  border-color: color-mix(in srgb, var(--primary) 45%, var(--border));
+  box-shadow: var(--shadow-sm);
+}
+
+.card-hover:active {
+  box-shadow: var(--shadow-xs);
+}
+
+/* Animated outline for focusable interactive elements */
+.focus-outline-gradient:focus-visible {
+  outline: 2px solid transparent;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--primary);
+  border-radius: inherit;
+}
+
+/* --------------------------------------------------------- */
+/* Link Styling                                                */
+/* --------------------------------------------------------- */
+a:not(.unstyle-link) {
+  color: var(--primary);
+  text-decoration: none;
+  position: relative;
+  transition: color var(--transition-base);
+}
+
+a:not(.unstyle-link)::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(.35);
+  transform-origin: left;
+  transition: transform 260ms cubic-bezier(.4, 0, .2, 1);
+  opacity: .55;
+}
+
+a:not(.unstyle-link):hover {
+  color: color-mix(in srgb, var(--primary) 85%, var(--accent));
+}
+
+a:not(.unstyle-link):hover::after {
+  transform: scaleX(1);
+  opacity: .9;
+}
+
+a:not(.unstyle-link):focus-visible::after {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* Muted text helper */
+.text-soft {
+  color: var(--muted-foreground);
+}
+
+/* Utility to center and constrain content width */
+.layout-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* --------------------------------------------------------- */
+/* Dark mode nuance tweaks                                     */
+/* --------------------------------------------------------- */
+.dark .card-hover:hover {
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, .45);
+}
+
+.dark .glass {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+}
+
+.dark .glass-dark {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+}
+
+/* --------------------------------------------------------- */
+/* Reduced Motion Additions                                    */
+/* --------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+  .hover-scale-sm,
+  .card-hover,
+  .interactive-base {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+/* --------------------------------------------------------- */
+/* Print Simplifications                                       */
+/* --------------------------------------------------------- */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+
+  a::after {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------- */
+/* Dashboard Background Enhancements (Student)               */
+/* --------------------------------------------------------- */
+.hero-gradient {
+  background:
+    radial-gradient(circle at 18% 25%, color-mix(in srgb, var(--primary) 22%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--accent) 18%, transparent) 0%, transparent 60%),
+    linear-gradient(135deg, color-mix(in srgb, var(--background) 90%, var(--primary) 9%), var(--background));
+  mask: linear-gradient(to bottom, rgba(0, 0, 0, .9), rgba(0, 0, 0, .7) 50%, transparent 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%;
+  animation: heroDrift 42s ease-in-out infinite;
+}
+
+.pattern-grid {
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--border) 38%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--border) 34%, transparent) 1px, transparent 1px);
+  background-size: 44px 44px, 44px 44px;
+  background-position: 0 0, 0 0;
+  pointer-events: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pattern-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--border) 18%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--border) 16%, transparent) 1px, transparent 1px);
+  }
+}
+
+/* ========================================================= */
+/* Live Background (Student pages)                           */
+/* ========================================================= */
+.student-bg-container {
+  position: relative;
+}
+
+.live-bg-base {
+  position: absolute;
+  inset: 0;
+  z-index: -50;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 20%, color-mix(in srgb, var(--primary) 18%, transparent) 0%, transparent 60%),
+    radial-gradient(circle at 85% 30%, color-mix(in srgb, var(--accent) 20%, transparent) 0%, transparent 65%),
+    linear-gradient(120deg, color-mix(in srgb, var(--background) 92%, var(--primary) 5%), var(--background));
+  background-size: 140% 140%;
+  animation: bgShift 60s ease-in-out infinite;
+}
+
+.live-bg-mesh {
+  position: absolute;
+  inset: 0;
+  z-index: -48;
+  mix-blend-mode: overlay;
+  opacity: .55;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0) 45%, rgba(0, 0, 0, 0.06) 75%),
+    radial-gradient(circle at 60% 70%, color-mix(in srgb, var(--accent) 16%, transparent) 0%, transparent 70%);
+  animation: meshPulse 18s ease-in-out infinite;
+}
+
+.live-bg-blobs {
+  position: absolute;
+  inset: 0;
+  z-index: -47;
+  filter: blur(64px) saturate(115%);
+  background:
+    radial-gradient(circle at var(--x1, 22%) var(--y1, 68%), color-mix(in srgb, var(--primary) 32%, transparent) 0%, transparent 55%),
+    radial-gradient(circle at var(--x2, 78%) var(--y2, 32%), color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 60%),
+    radial-gradient(circle at var(--x3, 55%) var(--y3, 84%), color-mix(in srgb, var(--chart-3) 26%, transparent) 0%, transparent 65%);
+  animation: blobsMove 32s linear infinite;
+}
+
+.live-bg-noise {
+  position: absolute;
+  inset: 0;
+  z-index: -46;
+  mix-blend-mode: soft-light;
+  opacity: .25;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.18'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  animation: noiseDrift 9s steps(3, end) infinite;
+}
+
+.live-bg-fade {
+  position: absolute;
+  inset: 0;
+  z-index: -45;
+  pointer-events: none;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.70) 0%, rgba(255, 255, 255, 0.55) 140px, rgba(255, 255, 255, 0.35) 380px, rgba(255, 255, 255, 0.55) 70%, var(--background) 100%);
+}
+
+.dark .live-bg-fade {
+  background: linear-gradient(to bottom, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.70) 160px, rgba(15, 23, 42, 0.55) 400px, rgba(15, 23, 42, 0.60) 70%, var(--background) 100%);
+}
+
+@keyframes bgShift {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes meshPulse {
+
+  0%,
+  100% {
+    opacity: .45;
+  }
+
+  50% {
+    opacity: .72;
+  }
+}
+
+@keyframes blobsMove {
+  0% {
+    --x1: 22%;
+    --y1: 68%;
+    --x2: 78%;
+    --y2: 32%;
+    --x3: 55%;
+    --y3: 84%;
+  }
+
+  33% {
+    --x1: 28%;
+    --y1: 60%;
+    --x2: 72%;
+    --y2: 42%;
+    --x3: 60%;
+    --y3: 78%;
+  }
+
+  66% {
+    --x1: 15%;
+    --y1: 72%;
+    --x2: 82%;
+    --y2: 30%;
+    --x3: 50%;
+    --y3: 90%;
+  }
+
+  100% {
+    --x1: 22%;
+    --y1: 68%;
+    --x2: 78%;
+    --y2: 32%;
+    --x3: 55%;
+    --y3: 84%;
+  }
+}
+
+@keyframes noiseDrift {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 300px 300px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .live-bg-base,
+  .live-bg-mesh,
+  .live-bg-blobs,
+  .live-bg-noise {
+    animation: none !important;
+  }
+}
+
+/* Subtle hero gradient drift animation */
+@keyframes heroDrift {
+  0% {
+    background-position: 0% 0%, 100% 0%, 0% 0%;
+    filter: saturate(1) brightness(1);
+  }
+
+  45% {
+    background-position: 3% 2%, 97% 4%, 0% 0%;
+    filter: saturate(1.05) brightness(1.02);
+  }
+
+  55% {
+    background-position: 3% 2%, 97% 4%, 0% 0%;
+    filter: saturate(1.05) brightness(1.02);
+  }
+
+  100% {
+    background-position: 0% 0%, 100% 0%, 0% 0%;
+    filter: saturate(1) brightness(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-gradient {
+    animation: none !important;
+  }
+}
+
+/* ========================================================= */
+/* Canvas driven student background (advanced)               */
+/* ========================================================= */
+.student-bg-canvas-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: -10;
+  overflow: hidden;
+}
+
+.student-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.student-bg-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.05) 0 4px, transparent 4px 12px);
+  opacity: .35;
+}
+
+.dark .student-bg-overlay {
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.07) 0 4px, transparent 4px 12px);
+  opacity: .28;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .student-bg-overlay {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------- */
+/* Simple Static Student Gradient (minimal final)            */
+/* --------------------------------------------------------- */
+.student-simple-gradient {
+  position: relative;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(20, 184, 166, 0.18) 0%, rgba(20, 184, 166, 0) 55%),
+    radial-gradient(circle at 82% 26%, rgba(139, 92, 246, 0.16) 0%, rgba(139, 92, 246, 0) 58%),
+    radial-gradient(circle at 55% 78%, rgba(14, 165, 233, 0.14) 0%, rgba(14, 165, 233, 0) 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--background) 94%, var(--primary) 4%), var(--background));
+  background-size: 120% 120%, 120% 120%, 140% 140%, 100% 100%;
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+.dark .student-simple-gradient {
+  /* Dark mode: brighten base + clearer soft color glows */
+  background:
+    radial-gradient(circle at 18% 20%, rgba(45, 212, 191, 0.32) 0%, rgba(45, 212, 191, 0) 55%),
+    radial-gradient(circle at 82% 24%, rgba(168, 85, 247, 0.30) 0%, rgba(168, 85, 247, 0) 60%),
+    radial-gradient(circle at 58% 78%, rgba(56, 189, 248, 0.28) 0%, rgba(56, 189, 248, 0) 62%),
+    linear-gradient(180deg, #17263b 0%, #132b36 40%, #132732 70%, #111f29 100%);
+  background-attachment: fixed;
+  /* subtle grain to avoid flat black feel */
+  --student-noise: repeating-linear-gradient(60deg, rgba(255, 255, 255, 0.04) 0 2px, rgba(255, 255, 255, 0) 2px 6px);
+  background-image:
+    radial-gradient(circle at 18% 20%, rgba(45, 212, 191, 0.32) 0%, rgba(45, 212, 191, 0) 55%),
+    radial-gradient(circle at 82% 24%, rgba(168, 85, 247, 0.30) 0%, rgba(168, 85, 247, 0) 60%),
+    radial-gradient(circle at 58% 78%, rgba(56, 189, 248, 0.28) 0%, rgba(56, 189, 248, 0) 62%),
+    linear-gradient(180deg, #17263b 0%, #132b36 40%, #132732 70%, #111f29 100%),
+    var(--student-noise);
+  background-blend-mode: normal, normal, normal, normal, overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .student-simple-gradient {
+    background-size: 100% 100%;
+  }
+}
+
+/* --------------------------------------------------------- */
+/* Additional Role Gradients                                 */
+/* --------------------------------------------------------- */
+/* Placement Cell (amber + teal) */
+.placement-gradient {
+  position: relative;
+  background:
+    radial-gradient(circle at 20% 25%, rgba(245, 158, 11, 0.18) 0%, rgba(245, 158, 11, 0) 55%),
+    radial-gradient(circle at 80% 30%, rgba(16, 185, 129, 0.16) 0%, rgba(16, 185, 129, 0) 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--background) 95%, rgba(253, 230, 138, 0.6)), var(--background));
+  background-attachment: fixed;
+}
+
+.dark .placement-gradient {
+  background:
+    radial-gradient(circle at 22% 28%, rgba(251, 191, 36, 0.28) 0%, rgba(251, 191, 36, 0) 58%),
+    radial-gradient(circle at 78% 26%, rgba(34, 197, 94, 0.25) 0%, rgba(34, 197, 94, 0) 62%),
+    linear-gradient(180deg, #1f1d10 0%, #1a1e12 50%, #151a12 100%);
+  background-attachment: fixed;
+}
+
+/* Faculty (purple + indigo) */
+.faculty-gradient {
+  position: relative;
+  background:
+    radial-gradient(circle at 18% 24%, rgba(139, 92, 246, 0.20) 0%, rgba(139, 92, 246, 0) 55%),
+    radial-gradient(circle at 82% 32%, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0) 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--background) 94%, rgba(139, 92, 246, 0.5)), var(--background));
+  background-attachment: fixed;
+}
+
+.dark .faculty-gradient {
+  background:
+    radial-gradient(circle at 20% 26%, rgba(167, 139, 250, 0.30) 0%, rgba(167, 139, 250, 0) 58%),
+    radial-gradient(circle at 78% 28%, rgba(129, 140, 248, 0.28) 0%, rgba(129, 140, 248, 0) 60%),
+    linear-gradient(180deg, #1c1730 0%, #17132a 50%, #120f22 100%);
+  background-attachment: fixed;
+}
+
+/* Employer (blue + cyan) */
+.employer-gradient {
+  position: relative;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(59, 130, 246, 0.20) 0%, rgba(59, 130, 246, 0) 55%),
+    radial-gradient(circle at 80% 30%, rgba(6, 182, 212, 0.18) 0%, rgba(6, 182, 212, 0) 60%),
+    linear-gradient(180deg, color-mix(in srgb, var(--background) 94%, rgba(59, 130, 246, 0.55)), var(--background));
+  background-attachment: fixed;
+}
+
+.dark .employer-gradient {
+  background:
+    radial-gradient(circle at 20% 24%, rgba(96, 165, 250, 0.30) 0%, rgba(96, 165, 250, 0) 55%),
+    radial-gradient(circle at 78% 30%, rgba(34, 211, 238, 0.28) 0%, rgba(34, 211, 238, 0) 60%),
+    linear-gradient(180deg, #101d30 0%, #0d1829 50%, #0a1422 100%);
+  background-attachment: fixed;
+}
+
+/* --------------------------------------------------------- */
+/* Modal Overlay (blur for student application details)      */
+/* --------------------------------------------------------- */
+.modal-overlay {
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dark .modal-overlay {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-overlay {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* When a modal is open, soften/hide layout separator lines */
+.modal-open .sidebar-border-fade {
+  border-color: transparent !important;
+}
+
+.modal-open .sidebar-border-fade>.inner-border {
+  border-color: transparent !important;
+}
